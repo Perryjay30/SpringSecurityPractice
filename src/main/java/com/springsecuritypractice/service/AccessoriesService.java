@@ -2,7 +2,8 @@ package com.springsecuritypractice.service;
 
 import com.springsecuritypractice.model.Accessories;
 import com.springsecuritypractice.model.User;
-import com.springsecuritypractice.repository.AccessoriesRepository;
+import com.springsecuritypractice.repository.UserRepository;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -18,9 +19,10 @@ public class AccessoriesService {
 
     private final PasswordEncoder passwordEncoder;
 
-    private final AccessoriesRepository accessoriesRepository;
+    private final UserRepository userRepository;
     List<Accessories> accessoriesList = null;
 
+    @PostConstruct
     public void loadAccessoriesFromDb() {
         accessoriesList = IntStream.rangeClosed(1, 100)
                 .mapToObj(i -> Accessories.builder()
@@ -44,7 +46,7 @@ public class AccessoriesService {
 
     public String adduser(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        accessoriesRepository.save(user);
+        userRepository.save(user);
         return "User added successfully";
     }
 }
